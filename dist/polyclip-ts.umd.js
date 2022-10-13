@@ -1,11 +1,11 @@
-// polyclip-ts v0.16.1 Copyright (c) 2022 Luiz Felipe Machado Barboza
+// polyclip-ts v0.16.2 Copyright (c) 2022 Luiz Felipe Machado Barboza
 (function (global, factory) {
 typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 typeof define === 'function' && define.amd ? define(['exports'], factory) :
 (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global["polyclip-ts"] = global["polyclip-ts"] || {}));
 })(this, (function (exports) { 'use strict';
 
-var version = "0.16.1";
+var version = "0.16.2";
 
 var constant = (x) => {
     return () => {
@@ -3424,7 +3424,7 @@ var snap = (eps) => {
 
 const set = (eps) => {
     return {
-        set: (eps) => precision = set(eps),
+        set: (eps) => { precision = set(eps); },
         reset: () => set(eps),
         compare: compare$1(eps),
         snap: snap(eps),
@@ -4815,16 +4815,15 @@ const operation = new Operation();
 const union = (geom, ...moreGeoms) => operation.run("union", geom, moreGeoms);
 const intersection = (geom, ...moreGeoms) => operation.run("intersection", geom, moreGeoms);
 const xor = (geom, ...moreGeoms) => operation.run("xor", geom, moreGeoms);
-const difference = (subjectGeom, ...clippingGeoms) => operation.run("difference", subjectGeom, clippingGeoms);
-({
-    union: union,
-    intersection: intersection,
-    xor: xor,
-    difference: difference,
-    setPrecision: precision.set
-});
+const difference = (geom, ...moreGeoms) => operation.run("difference", geom, moreGeoms);
+const setPrecision = precision.set;
 
+exports.difference = difference;
+exports.intersection = intersection;
+exports.setPrecision = setPrecision;
+exports.union = union;
 exports.version = version;
+exports.xor = xor;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
