@@ -1,5 +1,5 @@
 declare const set: (eps?: number) => {
-    set: (eps?: number) => any;
+    set: (eps?: number) => void;
     reset: () => any;
     compare: (a: import("bignumber.js").BigNumber, b: import("bignumber.js").BigNumber) => number;
     snap: (v: import("./vector.js").Vector) => import("./vector.js").Vector;

@@ -6,7 +6,7 @@ Apply boolean polygon clipping operations (`intersection`, `union`, `difference`
 
 <!-- prettier-ignore-start -->
 ```javascript
-import polyclip from "polyclip-ts"
+import * as polyclip from "polyclip-ts"
 
 const poly1 = [[[0,0],[2,0],[0,2],[0,0]]]
 const poly2 = [[[-1,0],[1,0],[0,1],[-1,0]]]

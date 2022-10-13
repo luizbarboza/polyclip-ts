@@ -39,8 +39,7 @@
   "scripts": {
     "preversion": "npm run test",
     "version": "npm run build && git add -A dist",
-    "postversion": "git push && git push --tags",
-    "prepublishOnly": "npm run test && npm run build",
+    "postversion": "git push && git push --tags && npm publish",
     "build": "rollup -c && tsc --declaration true --declarationDir types",
     "test": "npm run test:typecheck && npm run test:lint && npm run test:jest",
     "test:lint": "eslint src",
