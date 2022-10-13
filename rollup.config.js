@@ -1,46 +1,54 @@
-import resolve from "@rollup/plugin-node-resolve"
-import { babel } from "@rollup/plugin-babel"
-import { terser } from "rollup-plugin-terser"
-import pkg from "./package.json"
+import fs from "fs";
+import { terser } from "rollup-plugin-terser";
+import json from "@rollup/plugin-json";
+import node from "@rollup/plugin-node-resolve";
+import typescript from "@rollup/plugin-typescript";
+import * as meta from "./package.json";
+
+const filename = meta.name
+
+const copyrights = fs
+  .readFileSync("./LICENSE", "utf-8")
+  .split(/\n/g)
+  .filter((line) => /^copyright\s+/i.test(line))
+  .map((line) => line.replace(/^copyright\s+/i, ""));
+
+const config = {
+  input: "bundle.js",
+  output: {
+    indent: false,
+    banner: `// ${meta.name} v${meta.version} Copyright ${copyrights.join(", ")}`
+  },
+  plugins: [typescript(), node(), json()]
+};
 
 export default [
   {
-    input: "src/index.js",
+    ...config,
     output: {
-      name: "polygonClipping",
-      file: pkg.browser,
+      ...config.output,
+      name: "polyclip-ts",
       format: "umd",
-    },
-    plugins: [resolve(), babel({ babelHelpers: "bundled" })],
+      extend: true,
+      file: `dist/${filename}.umd.js`,
+    }
   },
   {
-    input: "src/index.js",
+    ...config,
     output: {
-      name: "polygonClipping",
-      file: pkg.browser.replace(/.js$/, ".min.js"),
+      ...config.output,
+      name: "polyclip-ts",
       format: "umd",
-      sourcemap: true,
+      extend: true,
+      file: `dist/${filename}.umd.min.js`,
     },
-    plugins: [resolve(), babel({ babelHelpers: "bundled" }), terser()],
-  },
-  {
-    input: "src/index.js",
-    output: [
-      {
-        file: pkg.main,
-        format: "cjs",
-      },
-      {
-        file: pkg.module,
-        format: "es",
-      },
-    ],
     plugins: [
-      babel({
-        babelHelpers: "bundled",
-        exclude: ["node_modules/**"],
-      }),
-    ],
-    external: ["splaytree"],
-  },
-]
+      ...config.plugins,
+      terser({
+        output: {
+          preamble: config.output.banner
+        }
+      })
+    ]
+  }
+];

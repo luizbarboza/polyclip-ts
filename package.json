@@ -1,35 +1,26 @@
 {
-  "name": "polygon-clipping",
-  "version": "0.15.3",
-  "description": "Apply boolean Polygon clipping operations (intersection, union, difference, xor) to your Polygons & MultiPolygons.",
+  "name": "polyclip-ts",
+  "description": "Apply boolean polygon clipping operations (intersection, union, difference, xor) to your Polygons & MultiPolygons.",
+  "version": "0.16.0",
+  "author": {
+    "name": "Luiz Felipe Machado Barboza"
+  },
+  "license": "MIT",
   "type": "module",
-  "main": "dist/polygon-clipping.cjs.js",
-  "module": "dist/polygon-clipping.esm.js",
-  "browser": "dist/polygon-clipping.umd.js",
-  "types": "dist/polygon-clipping.d.ts",
-  "scripts": {
-    "build": "rollup -c && cp src/polygon-clipping.d.ts dist/polygon-clipping.d.ts",
-    "docs:dev": "vite docs",
-    "docs:build": "vite build docs",
-    "docs:eslint": "cd docs && eslint --ext .js --ext .vue *config.js src/",
-    "lint": "npm-run-all -s lint:eslint docs:eslint lint:prettier",
-    "lint:eslint": "eslint .eslintrc.cjs *.config.js bench/ src/ test/",
-    "lint:prettier": "prettier --check ./* ./.eslintrc.cjs ./.github",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand",
-    "bench": "node bench/bench.js",
-    "prepublishOnly": "npm-run-all --serial lint docs:lint test build docs:build bench"
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "jsdelivr": "dist/polyclip-ts.umd.js",
+  "unpkg": "dist/polyclip-ts.umd.js",
+  "types": "types/index.d.ts",
+  "exports": {
+    "umd": "./dist/polyclip-ts.umd.js",
+    "default": "./dist/index.js"
   },
   "files": [
-    "dist"
+    "dist/**/*.js",
+    "src/**/*.ts",
+    "types/**/*.d.ts"
   ],
-  "browserslist": [
-    "> 0.25% or not dead"
-  ],
-  "jest": {
-    "collectCoverage": true,
-    "testEnvironment": "node"
-  },
   "keywords": [
     "polygon",
     "clipping",
@@ -41,40 +32,40 @@
     "geometry",
     "martinez"
   ],
-  "repository": "github:mfogel/polygon-clipping",
-  "author": "Mike Fogel <mike@fogel.ca>",
-  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SBanksX/polyclip-ts.git"
+  },
+  "scripts": {
+    "prepublishOnly": "npm run test && npm run build",
+    "build": "rollup -c && tsc --declaration true --declarationDir types",
+    "test": "npm run test:typecheck && npm run test:lint && npm run test:jest",
+    "test:lint": "eslint src",
+    "test:typecheck": "tsc --noEmit",
+    "test:jest": "jest",
+    "bench": "node bench/bench.js"
+  },
   "devDependencies": {
-    "@babel/cli": "^7.17.0",
-    "@babel/core": "^7.17.2",
-    "@babel/preset-env": "^7.16.11",
-    "@rollup/plugin-babel": "^5.3.0",
-    "@rollup/plugin-commonjs": "^21.0.1",
-    "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^13.1.3",
+    "@babel/preset-env": "^7.19.0",
+    "@babel/preset-typescript": "^7.18.6",
+    "@rollup/plugin-json": "4",
+    "@rollup/plugin-node-resolve": "13",
+    "@rollup/plugin-typescript": "^8.5.0",
     "@turf/difference": "^5.1.5",
     "@turf/intersect": "^5.1.6",
-    "@turf/meta": "^6.5.0",
     "@turf/union": "^5.1.5",
-    "@vitejs/plugin-vue": "^3.1.0",
-    "babel-jest": "^27.5.1",
+    "@types/node": "^18.8.5",
+    "@typescript-eslint/eslint-plugin": "^5.25.0",
+    "@typescript-eslint/parser": "^5.25.0",
     "benchmark": "^2.1.4",
-    "eslint": "^8.9.0",
-    "eslint-config-prettier": "^8.4.0",
-    "eslint-plugin-vue": "^8.7.1",
+    "eslint": "^8.16.0",
+    "eslint-config-prettier": "^8.5.0",
     "jest": "^27.5.1",
-    "leaflet": "^1.9.2",
-    "load-json-file": "^6.2.0",
     "martinez-polygon-clipping": "^0.7.1",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^2.5.1",
-    "robust-predicates": "^3.0.1",
-    "rollup": "^2.67.2",
-    "rollup-plugin-terser": "^7.0.2",
-    "vite": "^3.1.0",
-    "vue": "^3.2.37"
+    "rollup-plugin-terser": "7"
   },
   "dependencies": {
-    "splaytree": "^3.1.0"
+    "bignumber.js": "^9.1.0",
+    "splaytree-ts": "^1.0.0"
   }
 }

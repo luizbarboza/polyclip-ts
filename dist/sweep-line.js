@@ -1,0 +1,155 @@
+import { SplayTreeSet } from "splaytree-ts";
+import Segment from "./segment.js";
+import SweepEvent from "./sweep-event.js";
+/**
+ * NOTE:  We must be careful not to change any segments while
+ *        they are in the SplayTree. AFAIK, there's no way to tell
+ *        the tree to rebalance itself - thus before splitting
+ *        a segment that's in the tree, we remove it from the tree,
+ *        do the split, then re-insert it. (Even though splitting a
+ *        segment *shouldn't* change its correct position in the
+ *        sweep line tree, the reality is because of rounding errors,
+ *        it sometimes does.)
+ */
+export default class SweepLine {
+    queue;
+    tree;
+    segments;
+    constructor(queue, comparator = Segment.compare) {
+        this.queue = queue;
+        this.tree = new SplayTreeSet(comparator);
+        this.segments = [];
+    }
+    process(event) {
+        const segment = event.segment;
+        const newEvents = [];
+        // if we've already been consumed by another segment,
+        // clean up our body parts and get out
+        if (event.consumedBy) {
+            if (event.isLeft)
+                this.queue.delete(event.otherSE);
+            else
+                this.tree.delete(segment);
+            return newEvents;
+        }
+        if (event.isLeft)
+            this.tree.add(segment);
+        let prevSeg = segment;
+        let nextSeg = segment;
+        // skip consumed segments still in tree
+        do {
+            prevSeg = this.tree.lastBefore(prevSeg);
+        } while (prevSeg != null && prevSeg.consumedBy != undefined);
+        // skip consumed segments still in tree
+        do {
+            nextSeg = this.tree.firstAfter(nextSeg);
+        } while (nextSeg != null && nextSeg.consumedBy != undefined);
+        if (event.isLeft) {
+            // Check for intersections against the previous segment in the sweep line
+            let prevMySplitter = null;
+            if (prevSeg) {
+                const prevInter = prevSeg.getIntersection(segment);
+                if (prevInter !== null) {
+                    if (!segment.isAnEndpoint(prevInter))
+                        prevMySplitter = prevInter;
+                    if (!prevSeg.isAnEndpoint(prevInter)) {
+                        const newEventsFromSplit = this._splitSafely(prevSeg, prevInter);
+                        for (let i = 0, iMax = newEventsFromSplit.length; i < iMax; i++) {
+                            newEvents.push(newEventsFromSplit[i]);
+                        }
+                    }
+                }
+            }
+            // Check for intersections against the next segment in the sweep line
+            let nextMySplitter = null;
+            if (nextSeg) {
+                const nextInter = nextSeg.getIntersection(segment);
+                if (nextInter !== null) {
+                    if (!segment.isAnEndpoint(nextInter))
+                        nextMySplitter = nextInter;
+                    if (!nextSeg.isAnEndpoint(nextInter)) {
+                        const newEventsFromSplit = this._splitSafely(nextSeg, nextInter);
+                        for (let i = 0, iMax = newEventsFromSplit.length; i < iMax; i++) {
+                            newEvents.push(newEventsFromSplit[i]);
+                        }
+                    }
+                }
+            }
+            // For simplicity, even if we find more than one intersection we only
+            // spilt on the 'earliest' (sweep-line style) of the intersections.
+            // The other intersection will be handled in a future process().
+            if (prevMySplitter !== null || nextMySplitter !== null) {
+                let mySplitter = null;
+                if (prevMySplitter === null)
+                    mySplitter = nextMySplitter;
+                else if (nextMySplitter === null)
+                    mySplitter = prevMySplitter;
+                else {
+                    const cmpSplitters = SweepEvent.comparePoints(prevMySplitter, nextMySplitter);
+                    mySplitter = cmpSplitters <= 0 ? prevMySplitter : nextMySplitter;
+                }
+                // Rounding errors can cause changes in ordering,
+                // so remove afected segments and right sweep events before splitting
+                this.queue.delete(segment.rightSE);
+                newEvents.push(segment.rightSE);
+                const newEventsFromSplit = segment.split(mySplitter);
+                for (let i = 0, iMax = newEventsFromSplit.length; i < iMax; i++) {
+                    newEvents.push(newEventsFromSplit[i]);
+                }
+            }
+            if (newEvents.length > 0) {
+                // We found some intersections, so re-do the current event to
+                // make sure sweep line ordering is totally consistent for later
+                // use with the segment 'prev' pointers
+                this.tree.delete(segment);
+                newEvents.push(event);
+            }
+            else {
+                // done with left event
+                this.segments.push(segment);
+                segment.prev = prevSeg;
+            }
+        }
+        else {
+            // event.isRight
+            // since we're about to be removed from the sweep line, check for
+            // intersections between our previous and next segments
+            if (prevSeg && nextSeg) {
+                const inter = prevSeg.getIntersection(nextSeg);
+                if (inter !== null) {
+                    if (!prevSeg.isAnEndpoint(inter)) {
+                        const newEventsFromSplit = this._splitSafely(prevSeg, inter);
+                        for (let i = 0, iMax = newEventsFromSplit.length; i < iMax; i++) {
+                            newEvents.push(newEventsFromSplit[i]);
+                        }
+                    }
+                    if (!nextSeg.isAnEndpoint(inter)) {
+                        const newEventsFromSplit = this._splitSafely(nextSeg, inter);
+                        for (let i = 0, iMax = newEventsFromSplit.length; i < iMax; i++) {
+                            newEvents.push(newEventsFromSplit[i]);
+                        }
+                    }
+                }
+            }
+            this.tree.delete(segment);
+        }
+        return newEvents;
+    }
+    /* Safely split a segment that is currently in the datastructures
+     * IE - a segment other than the one that is currently being processed. */
+    _splitSafely(seg, pt) {
+        // Rounding errors can cause changes in ordering,
+        // so remove afected segments and right sweep events before splitting
+        // removeNode() doesn't work, so have re-find the seg
+        // https://github.com/w8r/splay-tree/pull/5
+        this.tree.delete(seg);
+        const rightSE = seg.rightSE;
+        this.queue.delete(rightSE);
+        const newEvents = seg.split(pt);
+        newEvents.push(rightSE);
+        // splitting can trigger consumption
+        if (seg.consumedBy === undefined)
+            this.tree.add(seg);
+        return newEvents;
+    }
+}

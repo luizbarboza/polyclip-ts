@@ -15,65 +15,70 @@ describe("sweep line", () => {
     const k3 = 13
     const k4 = 44
 
-    let n1 = sl.tree.insert(k1)
-    let n2 = sl.tree.insert(k2)
-    let n4 = sl.tree.insert(k4)
-    let n3 = sl.tree.insert(k3)
+    sl.tree.add(k1)
+    sl.tree.add(k2)
+    sl.tree.add(k3)
+    sl.tree.add(k4)
 
-    expect(sl.tree.find(k1)).toBe(n1)
-    expect(sl.tree.find(k2)).toBe(n2)
-    expect(sl.tree.find(k3)).toBe(n3)
-    expect(sl.tree.find(k4)).toBe(n4)
+    let n1 = sl.tree.lookup(k1)
+    let n2 = sl.tree.lookup(k2)
+    let n3 = sl.tree.lookup(k3)
+    let n4 = sl.tree.lookup(k4)
 
-    expect(sl.tree.prev(n1)).toBeNull()
-    expect(sl.tree.next(n1).key).toBe(k2)
+    expect(n1).toBe(k1)
+    expect(n2).toBe(k2)
+    expect(n3).toBe(k3)
+    expect(n4).toBe(k4)
 
-    expect(sl.tree.prev(n2).key).toBe(k1)
-    expect(sl.tree.next(n2).key).toBe(k3)
+    expect(sl.tree.lastBefore(n1)).toBeNull()
+    expect(sl.tree.firstAfter(n1)).toBe(k2)
 
-    expect(sl.tree.prev(n3).key).toBe(k2)
-    expect(sl.tree.next(n3).key).toBe(k4)
+    expect(sl.tree.lastBefore(n2)).toBe(k1)
+    expect(sl.tree.firstAfter(n2)).toBe(k3)
 
-    expect(sl.tree.prev(n4).key).toBe(k3)
-    expect(sl.tree.next(n4)).toBeNull()
+    expect(sl.tree.lastBefore(n3)).toBe(k2)
+    expect(sl.tree.firstAfter(n3)).toBe(k4)
 
-    sl.tree.remove(k2)
-    expect(sl.tree.find(k2)).toBeNull()
+    expect(sl.tree.lastBefore(n4)).toBe(k3)
+    expect(sl.tree.firstAfter(n4)).toBeNull()
 
-    n1 = sl.tree.find(k1)
-    n3 = sl.tree.find(k3)
-    n4 = sl.tree.find(k4)
+    sl.tree.delete(k2)
+    expect(sl.tree.lookup(k2)).toBeNull()
 
-    expect(sl.tree.prev(n1)).toBeNull()
-    expect(sl.tree.next(n1).key).toBe(k3)
+    n1 = sl.tree.lookup(k1)
+    n3 = sl.tree.lookup(k3)
+    n4 = sl.tree.lookup(k4)
 
-    expect(sl.tree.prev(n3).key).toBe(k1)
-    expect(sl.tree.next(n3).key).toBe(k4)
+    expect(sl.tree.lastBefore(n1)).toBeNull()
+    expect(sl.tree.firstAfter(n1)).toBe(k3)
 
-    expect(sl.tree.prev(n4).key).toBe(k3)
-    expect(sl.tree.next(n4)).toBeNull()
+    expect(sl.tree.lastBefore(n3)).toBe(k1)
+    expect(sl.tree.firstAfter(n3)).toBe(k4)
 
-    sl.tree.remove(k4)
-    expect(sl.tree.find(k4)).toBeNull()
+    expect(sl.tree.lastBefore(n4)).toBe(k3)
+    expect(sl.tree.firstAfter(n4)).toBeNull()
 
-    n1 = sl.tree.find(k1)
-    n3 = sl.tree.find(k3)
+    sl.tree.delete(k4)
+    expect(sl.tree.lookup(k4)).toBeNull()
 
-    expect(sl.tree.prev(n1)).toBeNull()
-    expect(sl.tree.next(n1).key).toBe(k3)
+    n1 = sl.tree.lookup(k1)
+    n3 = sl.tree.lookup(k3)
 
-    expect(sl.tree.prev(n3).key).toBe(k1)
-    expect(sl.tree.next(n3)).toBeNull()
+    expect(sl.tree.lastBefore(n1)).toBeNull()
+    expect(sl.tree.firstAfter(n1)).toBe(k3)
 
-    sl.tree.remove(k1)
-    expect(sl.tree.find(k1)).toBeNull()
+    expect(sl.tree.lastBefore(n3)).toBe(k1)
+    expect(sl.tree.firstAfter(n3)).toBeNull()
 
-    n3 = sl.tree.find(k3)
+    sl.tree.delete(k1)
+    expect(sl.tree.lookup(k1)).toBeNull()
 
-    expect(sl.tree.prev(n3)).toBeNull()
-    expect(sl.tree.next(n3)).toBeNull()
+    n3 = sl.tree.lookup(k3)
 
-    sl.tree.remove(k3)
-    expect(sl.tree.find(k3)).toBeNull()
+    expect(sl.tree.lastBefore(n3)).toBeNull()
+    expect(sl.tree.firstAfter(n3)).toBeNull()
+
+    sl.tree.delete(k3)
+    expect(sl.tree.lookup(k3)).toBeNull()
   })
 })

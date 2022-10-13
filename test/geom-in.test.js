@@ -1,5 +1,6 @@
 /* eslint-env jest */
 
+import { BigNumber } from "bignumber.js"
 import { RingIn, PolyIn, MultiPolyIn } from "../src/geom-in"
 
 describe("RingIn", () => {
@@ -9,9 +10,9 @@ describe("RingIn", () => {
       [1, 0],
       [1, 1],
     ]
-    const expectedPt1 = { x: 0, y: 0 }
-    const expectedPt2 = { x: 1, y: 0 }
-    const expectedPt3 = { x: 1, y: 1 }
+    const expectedPt1 = { x: new BigNumber(0), y: new BigNumber(0) }
+    const expectedPt2 = { x: new BigNumber(1), y: new BigNumber(0) }
+    const expectedPt3 = { x: new BigNumber(1), y: new BigNumber(1) }
     const poly = {}
     const ring = new RingIn(ringGeomIn, poly, true)
     poly.exteriorRing = ring

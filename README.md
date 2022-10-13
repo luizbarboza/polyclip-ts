@@ -1,22 +1,20 @@
-# polygon-clipping
+# polyclip-ts
 
-Apply boolean Polygon clipping operations (`intersection`, `union`, `difference`, `xor`) to your Polygons & MultiPolygons.
-
-[![CI](https://github.com/mfogel/polygon-clipping/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mfogel/polygon-clipping/actions) [![codecov](https://codecov.io/gh/mfogel/polygon-clipping/branch/main/graph/badge.svg?token=is93inDQiJ)](https://codecov.io/gh/mfogel/polygon-clipping) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) [![npm](https://img.shields.io/npm/v/polygon-clipping.svg)](https://www.npmjs.com/package/polygon-clipping)
+Apply boolean polygon clipping operations (`intersection`, `union`, `difference`, `xor`) to your Polygons & MultiPolygons.
 
 ## Quickstart
 
 <!-- prettier-ignore-start -->
 ```javascript
-const polygonClipping = require('polygon-clipping')
+import polyclip from "polyclip-ts"
 
 const poly1 = [[[0,0],[2,0],[0,2],[0,0]]]
 const poly2 = [[[-1,0],[1,0],[0,1],[-1,0]]]
 
-polygonClipping.union       (poly1, poly2 /* , poly3, ... */)
-polygonClipping.intersection(poly1, poly2 /* , poly3, ... */)
-polygonClipping.xor         (poly1, poly2 /* , poly3, ... */)
-polygonClipping.difference  (poly1, poly2 /* , poly3, ... */)
+polyclip.union       (poly1, poly2 /* , poly3, ... */)
+polyclip.intersection(poly1, poly2 /* , poly3, ... */)
+polyclip.xor         (poly1, poly2 /* , poly3, ... */)
+polyclip.difference  (poly1, poly2 /* , poly3, ... */)
 ```
 <!-- prettier-ignore-end -->
 
@@ -25,17 +23,17 @@ polygonClipping.difference  (poly1, poly2 /* , poly3, ... */)
 ```javascript
 /* All functions take one or more [multi]polygon(s) as input */
 
-polygonClipping.union       (<geom>, ...<geoms>)
-polygonClipping.intersection(<geom>, ...<geoms>)
-polygonClipping.xor         (<geom>, ...<geoms>)
+polyclip.union       (geom, ...moreGeoms)
+polyclip.intersection(geom, ...moreGeoms)
+polyclip.xor         (geom, ...moreGeoms)
 
-/* The clipGeoms will be subtracted from the subjectGeom */
-polygonClipping.difference(<subjectGeom>, ...<clipGeoms>)
+/* The moreGeoms will be subtracted from the geom */
+polyclip.difference  (geom, ...moreGeoms)
 ```
 
 ### Input
 
-Each positional argument (`<geom>`) may be either a Polygon or a MultiPolygon. The [GeoJSON spec](https://tools.ietf.org/html/rfc7946#section-3.1) is followed, with the following notes/modifications:
+Each positional argument (`geom`) may be either a Polygon or a MultiPolygon. The [GeoJSON spec](https://tools.ietf.org/html/rfc7946#section-3.1) is followed, with the following notes/modifications:
 
 - MultiPolygons may contain touching or overlapping Polygons.
 - rings are not required to be self-closing.
@@ -70,33 +68,13 @@ The tests are broken up into unit tests and end-to-end tests. The end-to-end tes
 
 The Martinez-Rueda-Feito polygon clipping algorithm is used to compute the result in `O((n+k)*log(n))` time, where `n` is the total number of edges in all polygons involved and `k` is the number of intersections between edges.
 
-## Settings
-
-Global settings are set via environment variables.
-
-- **POLYGON_CLIPPING_MAX_QUEUE_SIZE** and **POLYGON_CLIPPING_MAX_SWEEPLINE_SEGMENTS**: Aims to prevent infinite loops - usually caused by floating-point math round-off errors. Defaults are 1,000,000.
-
-## Changelog
-
-This project adheres to [Semantic Versioning](https://semver.org/).
-
-<!-- prettier-ignore-end -->
-
-The full changelog is available at [CHANGELOG.md](https://github.com/mfogel/polygon-clipping/blob/master/CHANGELOG.md).
-
 ## Authors
 
+- [Luiz F. M. Barboza](https://github.com/SBanksX)
 - [Mike Fogel](https://github.com/mfogel)
 - [Alexander Milevski](https://github.com/w8r)
 - [Vladimir Ovsyannikov](https://github.com/sh1ng)
 
-## Sponsors
-
-- [Alantgeo](https://www.alantgeo.com.au/)
-- [EasyTerritory](https://www.easyterritory.com/)
-
-Please contact [Mike Fogel](https://github.com/mfogel) if you or your company is interested in sponsoring work on specific bug fixes or feature requests.
-
 ## Based on
 
-- [A new algorithm for computing Boolean operations on polygons](paper.pdf) by Francisco Martinez, Antonio Jesus Rueda, Francisco Ramon Feito (2009)
+- [A simple algorithm for Boolean operations on polygons](https://www.sciencedirect.com/science/article/abs/pii/S0965997813000379) by Francisco Martinez, Antonio Jesus Rueda, Francisco Ramon Feito (2009)

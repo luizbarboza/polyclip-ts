@@ -2,7 +2,6 @@
 
 import fs from "fs"
 import path from "path"
-import load from "load-json-file"
 import polygonClipping from "../src"
 
 /** USE ME TO RUN ONLY ONE TEST **/
@@ -21,11 +20,10 @@ describe("end to end", () => {
   targets.forEach((target) => {
     // ignore dotfiles like .DS_Store
     if (target.startsWith(".")) return
-    if (target.startsWith("broken-")) return
 
     describe(target, () => {
       const targetDir = path.join(endToEndDir, target)
-      const argsGeojson = load.sync(path.join(targetDir, "args.geojson"))
+      const argsGeojson = JSON.parse(fs.readFileSync(path.join(targetDir, "args.geojson")))
       const args = argsGeojson.features.map((f) => f.geometry.coordinates)
 
       const resultPathsAndOperationTypes = fs
@@ -59,9 +57,11 @@ describe("end to end", () => {
         else if (opOnly && operationType === opOnly) doTest = test.only
 
         doTest(operationType, () => {
-          const resultGeojson = load.sync(resultPath)
+          const resultGeojson = JSON.parse(fs.readFileSync(resultPath))
           const expected = resultGeojson.geometry.coordinates
+          const options = resultGeojson?.properties?.options
 
+          polygonClipping.setPrecision(options?.precision)
           const operation = polygonClipping[operationType]
           if (!operation) {
             throw new Error(

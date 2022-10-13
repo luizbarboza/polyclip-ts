@@ -1,0 +1,17 @@
+{
+  "type": "Feature",
+  "geometry": {
+    "type": "MultiPolygon",
+    "coordinates": [
+      [
+        [
+          [4, 0],
+          [20, 0],
+          [17, 4],
+          [7, 4],
+          [4, 0]
+        ]
+      ]
+    ]
+  }
+}

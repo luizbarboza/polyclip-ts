@@ -3,15 +3,17 @@
 // hard to unit test these structures as much of what they
 // do is operate off of the result of the sweep line sweep
 
+import BigNumber from "bignumber.js"
 import Segment from "../src/segment"
 import { RingOut, PolyOut, MultiPolyOut } from "../src/geom-out"
+import { precision } from "../src/precision"
 
 describe("ring", () => {
   describe("factory", () => {
     test("simple triangle", () => {
-      const p1 = { x: 0, y: 0 }
-      const p2 = { x: 1, y: 1 }
-      const p3 = { x: 0, y: 1 }
+      const p1 = { x: new BigNumber(0), y: new BigNumber(0) }
+      const p2 = { x: new BigNumber(1), y: new BigNumber(1) }
+      const p3 = { x: new BigNumber(0), y: new BigNumber(1) }
 
       const seg1 = Segment.fromRing(p1, p2)
       const seg2 = Segment.fromRing(p2, p3)
@@ -33,17 +35,17 @@ describe("ring", () => {
     })
 
     test("bow tie", () => {
-      const p1 = { x: 0, y: 0 }
-      const p2 = { x: 1, y: 1 }
-      const p3 = { x: 0, y: 2 }
+      const p1 = { x: new BigNumber(0), y: new BigNumber(0) }
+      const p2 = { x: new BigNumber(1), y: new BigNumber(1) }
+      const p3 = { x: new BigNumber(0), y: new BigNumber(2) }
 
       const seg1 = Segment.fromRing(p1, p2)
       const seg2 = Segment.fromRing(p2, p3)
       const seg3 = Segment.fromRing(p3, p1)
 
-      const p4 = { x: 2, y: 0 }
+      const p4 = { x: new BigNumber(2), y: new BigNumber(0) }
       const p5 = p2
-      const p6 = { x: 2, y: 2 }
+      const p6 = { x: new BigNumber(2), y: new BigNumber(2) }
 
       const seg4 = Segment.fromRing(p4, p5)
       const seg5 = Segment.fromRing(p5, p6)
@@ -74,19 +76,19 @@ describe("ring", () => {
     })
 
     test("ringed ring", () => {
-      const p1 = { x: 0, y: 0 }
-      const p2 = { x: 3, y: -3 }
-      const p3 = { x: 3, y: 0 }
-      const p4 = { x: 3, y: 3 }
+      const p1 = { x: new BigNumber(0), y: new BigNumber(0) }
+      const p2 = { x: new BigNumber(3), y: new BigNumber(-3) }
+      const p3 = { x: new BigNumber(3), y: new BigNumber(0) }
+      const p4 = { x: new BigNumber(3), y: new BigNumber(3) }
 
       const seg1 = Segment.fromRing(p1, p2)
       const seg2 = Segment.fromRing(p2, p3)
       const seg3 = Segment.fromRing(p3, p4)
       const seg4 = Segment.fromRing(p4, p1)
 
-      const p5 = { x: 2, y: -1 }
+      const p5 = { x: new BigNumber(2), y: new BigNumber(-1) }
       const p6 = p3
-      const p7 = { x: 2, y: 1 }
+      const p7 = { x: new BigNumber(2), y: new BigNumber(1) }
 
       const seg5 = Segment.fromRing(p5, p6)
       const seg6 = Segment.fromRing(p6, p7)
@@ -118,20 +120,20 @@ describe("ring", () => {
     })
 
     test("ringed ring interior ring starting point extraneous", () => {
-      const p1 = { x: 0, y: 0 }
-      const p2 = { x: 5, y: -5 }
-      const p3 = { x: 4, y: 0 }
-      const p4 = { x: 5, y: 5 }
+      const p1 = { x: new BigNumber(0), y: new BigNumber(0) }
+      const p2 = { x: new BigNumber(5), y: new BigNumber(-5) }
+      const p3 = { x: new BigNumber(4), y: new BigNumber(0) }
+      const p4 = { x: new BigNumber(5), y: new BigNumber(5) }
 
       const seg1 = Segment.fromRing(p1, p2)
       const seg2 = Segment.fromRing(p2, p3)
       const seg3 = Segment.fromRing(p3, p4)
       const seg4 = Segment.fromRing(p4, p1)
 
-      const p5 = { x: 1, y: 0 }
-      const p6 = { x: 4, y: 1 }
+      const p5 = { x: new BigNumber(1), y: new BigNumber(0) }
+      const p6 = { x: new BigNumber(4), y: new BigNumber(1) }
       const p7 = p3
-      const p8 = { x: 4, y: -1 }
+      const p8 = { x: new BigNumber(4), y: new BigNumber(-1) }
 
       const seg5 = Segment.fromRing(p5, p6)
       const seg6 = Segment.fromRing(p6, p7)
@@ -167,27 +169,27 @@ describe("ring", () => {
     })
 
     test("ringed ring and bow tie at same point", () => {
-      const p1 = { x: 0, y: 0 }
-      const p2 = { x: 3, y: -3 }
-      const p3 = { x: 3, y: 0 }
-      const p4 = { x: 3, y: 3 }
+      const p1 = { x: new BigNumber(0), y: new BigNumber(0) }
+      const p2 = { x: new BigNumber(3), y: new BigNumber(-3) }
+      const p3 = { x: new BigNumber(3), y: new BigNumber(0) }
+      const p4 = { x: new BigNumber(3), y: new BigNumber(3) }
 
       const seg1 = Segment.fromRing(p1, p2)
       const seg2 = Segment.fromRing(p2, p3)
       const seg3 = Segment.fromRing(p3, p4)
       const seg4 = Segment.fromRing(p4, p1)
 
-      const p5 = { x: 2, y: -1 }
+      const p5 = { x: new BigNumber(2), y: new BigNumber(-1) }
       const p6 = p3
-      const p7 = { x: 2, y: 1 }
+      const p7 = { x: new BigNumber(2), y: new BigNumber(1) }
 
       const seg5 = Segment.fromRing(p5, p6)
       const seg6 = Segment.fromRing(p6, p7)
       const seg7 = Segment.fromRing(p7, p5)
 
       const p8 = p3
-      const p9 = { x: 4, y: -1 }
-      const p10 = { x: 4, y: 1 }
+      const p9 = { x: new BigNumber(4), y: new BigNumber(-1) }
+      const p10 = { x: new BigNumber(4), y: new BigNumber(1) }
 
       const seg8 = Segment.fromRing(p8, p9)
       const seg9 = Segment.fromRing(p9, p10)
@@ -229,25 +231,25 @@ describe("ring", () => {
     })
 
     test("double bow tie", () => {
-      const p1 = { x: 0, y: 0 }
-      const p2 = { x: 1, y: -2 }
-      const p3 = { x: 1, y: 2 }
+      const p1 = { x: new BigNumber(0), y: new BigNumber(0) }
+      const p2 = { x: new BigNumber(1), y: new BigNumber(-2) }
+      const p3 = { x: new BigNumber(1), y: new BigNumber(2) }
 
       const seg1 = Segment.fromRing(p1, p2)
       const seg2 = Segment.fromRing(p2, p3)
       const seg3 = Segment.fromRing(p3, p1)
 
       const p4 = p2
-      const p5 = { x: 2, y: -3 }
-      const p6 = { x: 2, y: -1 }
+      const p5 = { x: new BigNumber(2), y: new BigNumber(-3) }
+      const p6 = { x: new BigNumber(2), y: new BigNumber(-1) }
 
       const seg4 = Segment.fromRing(p4, p5)
       const seg5 = Segment.fromRing(p5, p6)
       const seg6 = Segment.fromRing(p6, p4)
 
       const p7 = p3
-      const p8 = { x: 2, y: 1 }
-      const p9 = { x: 2, y: 3 }
+      const p8 = { x: new BigNumber(2), y: new BigNumber(1) }
+      const p9 = { x: new BigNumber(2), y: new BigNumber(3) }
 
       const seg7 = Segment.fromRing(p7, p8)
       const seg8 = Segment.fromRing(p8, p9)
@@ -288,25 +290,25 @@ describe("ring", () => {
     })
 
     test("double ringed ring", () => {
-      const p1 = { x: 0, y: 0 }
-      const p2 = { x: 5, y: -5 }
-      const p3 = { x: 5, y: 5 }
+      const p1 = { x: new BigNumber(0), y: new BigNumber(0) }
+      const p2 = { x: new BigNumber(5), y: new BigNumber(-5) }
+      const p3 = { x: new BigNumber(5), y: new BigNumber(5) }
 
       const seg1 = Segment.fromRing(p1, p2)
       const seg2 = Segment.fromRing(p2, p3)
       const seg3 = Segment.fromRing(p3, p1)
 
-      const p4 = { x: 1, y: -1 }
+      const p4 = { x: new BigNumber(1), y: new BigNumber(-1) }
       const p5 = p2
-      const p6 = { x: 2, y: -1 }
+      const p6 = { x: new BigNumber(2), y: new BigNumber(-1) }
 
       const seg4 = Segment.fromRing(p4, p5)
       const seg5 = Segment.fromRing(p5, p6)
       const seg6 = Segment.fromRing(p6, p4)
 
-      const p7 = { x: 1, y: 1 }
+      const p7 = { x: new BigNumber(1), y: new BigNumber(1) }
       const p8 = p3
-      const p9 = { x: 2, y: 1 }
+      const p9 = { x: new BigNumber(2), y: new BigNumber(1) }
 
       const seg7 = Segment.fromRing(p7, p8)
       const seg8 = Segment.fromRing(p8, p9)
@@ -347,9 +349,9 @@ describe("ring", () => {
     })
 
     test("errors on on malformed ring", () => {
-      const p1 = { x: 0, y: 0 }
-      const p2 = { x: 1, y: 1 }
-      const p3 = { x: 0, y: 1 }
+      const p1 = { x: new BigNumber(0), y: new BigNumber(0) }
+      const p2 = { x: new BigNumber(1), y: new BigNumber(1) }
+      const p3 = { x: new BigNumber(0), y: new BigNumber(1) }
 
       const seg1 = Segment.fromRing(p1, p2)
       const seg2 = Segment.fromRing(p2, p3)
@@ -364,9 +366,9 @@ describe("ring", () => {
   })
 
   test("exterior ring", () => {
-    const p1 = { x: 0, y: 0 }
-    const p2 = { x: 1, y: 1 }
-    const p3 = { x: 0, y: 1 }
+    const p1 = { x: new BigNumber(0), y: new BigNumber(0) }
+    const p2 = { x: new BigNumber(1), y: new BigNumber(1) }
+    const p3 = { x: new BigNumber(0), y: new BigNumber(1) }
 
     const seg1 = Segment.fromRing(p1, p2)
     const seg2 = Segment.fromRing(p2, p3)
@@ -389,9 +391,9 @@ describe("ring", () => {
   })
 
   test("interior ring points reversed", () => {
-    const p1 = { x: 0, y: 0 }
-    const p2 = { x: 1, y: 1 }
-    const p3 = { x: 0, y: 1 }
+    const p1 = { x: new BigNumber(0), y: new BigNumber(0) }
+    const p2 = { x: new BigNumber(1), y: new BigNumber(1) }
+    const p3 = { x: new BigNumber(0), y: new BigNumber(1) }
 
     const seg1 = Segment.fromRing(p1, p2)
     const seg2 = Segment.fromRing(p2, p3)
@@ -414,10 +416,10 @@ describe("ring", () => {
   })
 
   test("removes colinear points successfully", () => {
-    const p1 = { x: 0, y: 0 }
-    const p2 = { x: 1, y: 1 }
-    const p3 = { x: 2, y: 2 }
-    const p4 = { x: 0, y: 2 }
+    const p1 = { x: new BigNumber(0), y: new BigNumber(0) }
+    const p2 = { x: new BigNumber(1), y: new BigNumber(1) }
+    const p3 = { x: new BigNumber(2), y: new BigNumber(2) }
+    const p4 = { x: new BigNumber(0), y: new BigNumber(2) }
 
     const seg1 = Segment.fromRing(p1, p2)
     const seg2 = Segment.fromRing(p2, p3)
@@ -440,11 +442,12 @@ describe("ring", () => {
   })
 
   test("almost equal point handled ok", () => {
+    precision.set(1E-9)
     // points harvested from https://github.com/mfogel/polygon-clipping/issues/37
-    const p1 = { x: 0.523985, y: 51.281651 }
-    const p2 = { x: 0.5241, y: 51.2816 }
-    const p3 = { x: 0.5240213684210527, y: 51.281687368421 }
-    const p4 = { x: 0.5239850000000027, y: 51.281651000000004 } // almost equal to p1
+    const p1 = { x: new BigNumber(0.523985), y: new BigNumber(51.281651) }
+    const p2 = { x: new BigNumber(0.5241), y: new BigNumber(51.2816) }
+    const p3 = { x: new BigNumber(0.5240213684210527), y: new BigNumber(51.281687368421) }
+    const p4 = { x: new BigNumber(0.5239850000000027), y: new BigNumber(51.281651000000004) } // almost equal to p1
 
     const seg1 = Segment.fromRing(p1, p2)
     const seg2 = Segment.fromRing(p2, p3)
@@ -462,16 +465,16 @@ describe("ring", () => {
       [0.523985, 51.281651],
       [0.5241, 51.2816],
       [0.5240213684210527, 51.281687368421],
-      [0.5239850000000027, 51.281651000000004],
       [0.523985, 51.281651],
     ])
+    precision.set()
   })
 
   test("ring with all colinear points returns null", () => {
-    const p1 = { x: 0, y: 0 }
-    const p2 = { x: 1, y: 1 }
-    const p3 = { x: 2, y: 2 }
-    const p4 = { x: 3, y: 3 }
+    const p1 = { x: new BigNumber(0), y: new BigNumber(0) }
+    const p2 = { x: new BigNumber(1), y: new BigNumber(1) }
+    const p3 = { x: new BigNumber(2), y: new BigNumber(2) }
+    const p4 = { x: new BigNumber(3), y: new BigNumber(3) }
 
     const seg1 = Segment.fromRing(p1, p2)
     const seg2 = Segment.fromRing(p2, p3)
