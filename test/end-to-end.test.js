@@ -2,7 +2,7 @@
 
 import fs from "fs"
 import path from "path"
-import polygonClipping from "../src"
+import * as polyclip from "../src"
 
 /** USE ME TO RUN ONLY ONE TEST **/
 const targetOnly = ""
@@ -61,8 +61,8 @@ describe("end to end", () => {
           const expected = resultGeojson.geometry.coordinates
           const options = resultGeojson?.properties?.options
 
-          polygonClipping.setPrecision(options?.precision)
-          const operation = polygonClipping[operationType]
+          polyclip.setPrecision(options?.precision)
+          const operation = polyclip[operationType]
           if (!operation) {
             throw new Error(
               `Unknown operation '${operationType}'. Mispelling in filename of ${resultPath} ?`,

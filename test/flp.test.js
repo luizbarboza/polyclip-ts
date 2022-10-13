@@ -4,7 +4,8 @@ import { BigNumber } from "bignumber.js"
 import { precision } from "../src/precision"
 
 describe("compare", () => {
-  const compare = precision.set(Number.EPSILON).compare
+  precision.set(Number.EPSILON)
+  const compare = precision.compare
   test("exactly equal", () => {
     const a = new BigNumber(1)
     const b = new BigNumber(1)
