@@ -11,9 +11,7 @@ export default (eps?: number) => {
     const yTree = new SplayTreeSet(compare(eps))
 
     const snapCoord = (coord: BigNumber, tree: SplayTreeSet<BigNumber>) => {
-      tree.add(coord)
-
-      return tree.lookup(coord)
+      return tree.addAndReturn(coord)
     }
 
     const snap = (v: Vector) => {
