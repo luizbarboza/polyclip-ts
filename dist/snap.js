@@ -7,8 +7,7 @@ export default (eps) => {
         const xTree = new SplayTreeSet(compare(eps));
         const yTree = new SplayTreeSet(compare(eps));
         const snapCoord = (coord, tree) => {
-            tree.add(coord);
-            return tree.lookup(coord);
+            return tree.addAndReturn(coord);
         };
         const snap = (v) => {
             return {

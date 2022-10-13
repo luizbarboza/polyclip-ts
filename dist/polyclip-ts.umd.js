@@ -1,11 +1,11 @@
-// polyclip-ts v0.16.0 Copyright (c) 2022 Luiz Felipe Machado Barboza
+// polyclip-ts v0.16.1 Copyright (c) 2022 Luiz Felipe Machado Barboza
 (function (global, factory) {
 typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 typeof define === 'function' && define.amd ? define(['exports'], factory) :
 (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global["polyclip-ts"] = global["polyclip-ts"] || {}));
 })(this, (function (exports) { 'use strict';
 
-var version = "0.16.0";
+var version = "0.16.1";
 
 var constant = (x) => {
     return () => {
@@ -3158,7 +3158,7 @@ class SplayTreeSet extends SplayTree {
         const compare = this.splay(element);
         if (compare != 0)
             this.addNewRoot(new SplayTreeSetNode(element), compare);
-        return this.root;
+        return this.root.key;
     }
     addAll(elements) {
         for (const element of elements) {
@@ -3408,8 +3408,7 @@ var snap = (eps) => {
         const xTree = new SplayTreeSet(compare$1(eps));
         const yTree = new SplayTreeSet(compare$1(eps));
         const snapCoord = (coord, tree) => {
-            tree.add(coord);
-            return tree.lookup(coord);
+            return tree.addAndReturn(coord);
         };
         const snap = (v) => {
             return {
