@@ -1,11 +1,11 @@
-// polyclip-ts v0.16.2 Copyright (c) 2022 Luiz Felipe Machado Barboza
+// polyclip-ts v0.17.0 Copyright (c) 2022 Luiz Felipe Machado Barboza
 (function (global, factory) {
 typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 typeof define === 'function' && define.amd ? define(['exports'], factory) :
 (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global["polyclip-ts"] = global["polyclip-ts"] || {}));
 })(this, (function (exports) { 'use strict';
 
-var version = "0.16.2";
+var version = "0.17.0";
 
 var constant = (x) => {
     return () => {

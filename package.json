@@ -1,7 +1,7 @@
 {
   "name": "polyclip-ts",
   "description": "Apply boolean polygon clipping operations (intersection, union, difference, xor) to your Polygons & MultiPolygons.",
-  "version": "0.16.2",
+  "version": "0.17.0",
   "author": {
     "name": "Luiz Felipe Machado Barboza"
   },
@@ -34,7 +34,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/SBanksX/polyclip-ts.git"
+    "url": "https://github.com/luizbarboza/polyclip-ts.git"
   },
   "scripts": {
     "preversion": "npm run test",
@@ -50,8 +50,10 @@
   "devDependencies": {
     "@babel/preset-env": "^7.19.0",
     "@babel/preset-typescript": "^7.18.6",
+    "@jest/globals": "^29.5.0",
     "@rollup/plugin-json": "4",
     "@rollup/plugin-node-resolve": "13",
+    "@rollup/plugin-terser": "^0.4.1",
     "@rollup/plugin-typescript": "^8.5.0",
     "@turf/difference": "^5.1.5",
     "@turf/intersect": "^5.1.6",
@@ -59,12 +61,11 @@
     "@types/node": "^18.8.5",
     "@typescript-eslint/eslint-plugin": "^5.25.0",
     "@typescript-eslint/parser": "^5.25.0",
+    "benchmark": "^2.1.4",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
     "jest": "^27.5.1",
-    "benchmark": "^2.1.4",
-    "martinez-polygon-clipping": "^0.7.1",
-    "rollup-plugin-terser": "7"
+    "martinez-polygon-clipping": "^0.7.1"
   },
   "dependencies": {
     "bignumber.js": "^9.1.0",
