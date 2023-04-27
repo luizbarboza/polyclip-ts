@@ -1,7 +1,7 @@
 import fs from "fs";
-import { terser } from "rollup-plugin-terser";
 import json from "@rollup/plugin-json";
 import node from "@rollup/plugin-node-resolve";
+import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
 import * as meta from "./package.json";
 

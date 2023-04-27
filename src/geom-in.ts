@@ -4,7 +4,7 @@ import { precision } from "./precision.js";
 import Segment from "./segment.js";
 import { Point } from "./sweep-event.js";
 
-type Ring = [BigNumber, BigNumber][]
+type Ring = [number, number][]
 export type Poly = Ring[]
 export type MultiPoly = Poly[]
 export type Geom = Poly | MultiPoly

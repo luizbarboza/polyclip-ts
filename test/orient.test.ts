@@ -1,7 +1,8 @@
 /* eslint-env jest */
 
+import {describe, expect, test} from "@jest/globals";
 import BigNumber from "bignumber.js";
-import { precision } from "../src/precision";
+import {precision} from "../src/precision";
 
 describe("compare vector angles", () => {
   test("colinear", () => {
