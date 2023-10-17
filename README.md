@@ -17,7 +17,7 @@ polyclip.intersection(…)
 For legacy environments, you can load polyclip-ts’s UMD bundle from an npm-based CDN such as jsDelivr; a polyclip global is exported:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/polyclip-ts@0.16.3/dist/polyclip-ts.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/polyclip-ts/dist/polyclip-ts.umd.min.js"></script>
 <script>
 polyclip.intersection(…)
 </script>
