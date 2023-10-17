@@ -2,6 +2,27 @@
 
 Apply boolean polygon clipping operations (`intersection`, `union`, `difference`, `xor`) to your Polygons & MultiPolygons.
 
+## Installing
+
+If you use npm, `npm install polyclip-ts`. You can also download the [latest release on GitHub](https://github.com/luizbarboza/polyclip-ts/tags). For vanilla HTML in modern browsers, import polyclip-ts from Skypack:
+
+```html
+<script type="module">
+import * as polyclip from "https://cdn.skypack.dev/polyclip-ts";
+
+polyclip.intersection(…)
+</script>
+```
+
+For legacy environments, you can load polyclip-ts’s UMD bundle from an npm-based CDN such as jsDelivr; a polyclip global is exported:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/polyclip-ts@0.16.3/dist/polyclip-ts.umd.min.js"></script>
+<script>
+polyclip.intersection(…)
+</script>
+```
+
 ## Quickstart
 
 <!-- prettier-ignore-start -->
