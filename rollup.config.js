@@ -27,7 +27,7 @@ export default [
     ...config,
     output: {
       ...config.output,
-      name: "polyclip-ts",
+      name: "polyclip",
       format: "umd",
       extend: true,
       file: `dist/${filename}.umd.js`,
@@ -37,7 +37,7 @@ export default [
     ...config,
     output: {
       ...config.output,
-      name: "polyclip-ts",
+      name: "polyclip",
       format: "umd",
       extend: true,
       file: `dist/${filename}.umd.min.js`,
