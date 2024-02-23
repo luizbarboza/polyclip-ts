@@ -2,6 +2,8 @@ import { Geom } from "./geom-in.js"
 import { precision } from "./precision.js"
 import operation from "./operation.js"
 
+export { Geom }
+
 export const union = (geom: Geom, ...moreGeoms: Geom[]) =>
   operation.run("union", geom, moreGeoms)
 

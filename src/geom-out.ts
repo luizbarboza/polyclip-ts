@@ -1,3 +1,4 @@
+import { MultiPoly, Poly, Ring } from "./geom-in.js"
 import { precision } from "./precision.js"
 import Segment from "./segment.js"
 import SweepEvent from "./sweep-event.js"
@@ -120,7 +121,7 @@ export class RingOut {
     const step = this.isExteriorRing() ? 1 : -1
     const iStart = this.isExteriorRing() ? 0 : points.length - 1
     const iEnd = this.isExteriorRing() ? points.length : -1
-    const orderedPoints = []
+    const orderedPoints: Ring = []
     for (let i = iStart; i != iEnd; i += step)
       orderedPoints.push([points[i].x.toNumber(), points[i].y.toNumber()])
     return orderedPoints
@@ -195,9 +196,10 @@ export class PolyOut {
   }
 
   getGeom() {
-    const geom = [this.exteriorRing.getGeom()]
+    const geom0 = this.exteriorRing.getGeom()
     // exterior ring was all (within rounding error of angle calc) colinear points
-    if (geom[0] === null) return null
+    if (geom0 === null) return null
+    const geom: Poly = [geom0];
     for (let i = 0, iMax = this.interiorRings.length; i < iMax; i++) {
       const ringGeom = this.interiorRings[i].getGeom()
       // interior ring was all (within rounding error of angle calc) colinear points
@@ -218,7 +220,7 @@ export class MultiPolyOut {
   }
 
   getGeom() {
-    const geom = []
+    const geom: MultiPoly = []
     for (let i = 0, iMax = this.polys.length; i < iMax; i++) {
       const polyGeom = this.polys[i].getGeom()
       // exterior ring was all (within rounding error of angle calc) colinear points
