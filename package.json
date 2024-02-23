@@ -1,7 +1,7 @@
 {
   "name": "polyclip-ts",
   "description": "Apply boolean polygon clipping operations (intersection, union, difference, xor) to your Polygons & MultiPolygons.",
-  "version": "0.16.3",
+  "version": "0.16.4",
   "author": {
     "name": "Luiz Felipe Machado Barboza"
   },
