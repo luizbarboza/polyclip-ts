@@ -13,8 +13,16 @@
   "unpkg": "dist/polyclip-ts.umd.min.js",
   "types": "types/index.d.ts",
   "exports": {
-    "umd": "./dist/polyclip-ts.umd.min.js",
-    "default": "./dist/index.js"
+    ".": {
+      "import": {
+        "default": "./dist/index.js",
+        "types": "./types/index.d.ts"
+      },
+      "require": {
+        "default": "./dist/index.js",
+        "types": "./types/index.d.ts"
+      }
+    } 
   },
   "files": [
     "dist/**/*.js",
