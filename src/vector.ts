@@ -1,8 +1,8 @@
-import BigNumber from "bignumber.js";
+import * as bn from "bignumber.js";
 
 export interface Vector {
-  x: BigNumber;
-  y: BigNumber;
+  x: bn.BigNumber;
+  y: bn.BigNumber;
 }
 
 /* Cross Product of two vectors with first point at origin */
@@ -30,7 +30,7 @@ export const cosineOfAngle = (pShared: Vector, pBase: Vector, pAngle: Vector) =>
 /* Get the x coordinate where the given line (defined by a point and vector)
  * crosses the horizontal line with the given y coordiante.
  * In the case of parrallel lines (including overlapping ones) returns null. */
-export const horizontalIntersection = (pt: Vector, v: Vector, y: BigNumber) => {
+export const horizontalIntersection = (pt: Vector, v: Vector, y: bn.BigNumber) => {
   if (v.y.isZero()) return null
   return { x: pt.x.plus((v.x.div(v.y)).times(y.minus(pt.y))), y: y }
 }
@@ -38,7 +38,7 @@ export const horizontalIntersection = (pt: Vector, v: Vector, y: BigNumber) => {
 /* Get the y coordinate where the given line (defined by a point and vector)
  * crosses the vertical line with the given x coordiante.
  * In the case of parrallel lines (including overlapping ones) returns null. */
-export const verticalIntersection = (pt: Vector, v: Vector, x: BigNumber) => {
+export const verticalIntersection = (pt: Vector, v: Vector, x: bn.BigNumber) => {
   if (v.x.isZero()) return null
   return { x: x, y: pt.y.plus((v.y.div(v.x)).times(x.minus(pt.x))) }
 }
