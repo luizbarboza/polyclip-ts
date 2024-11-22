@@ -14,6 +14,10 @@
   "types": "types/index.d.ts",
   "exports": {
     "umd": "./dist/polyclip-ts.umd.min.js",
+    "import": {
+      "types": "./types/index.d.ts",
+      "default": "./dist/index.js"
+    },
     "default": "./dist/index.js"
   },
   "files": [
