@@ -1,28 +1,25 @@
 {
   "name": "polyclip-ts",
   "description": "Apply boolean polygon clipping operations (intersection, union, difference, xor) to your Polygons & MultiPolygons.",
-  "version": "0.16.7",
+  "version": "0.16.8",
   "author": {
     "name": "Luiz Felipe Machado Barboza"
   },
   "license": "MIT",
   "type": "module",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "dist/esm/index.js",
+  "module": "dist/esm/index.js",
   "jsdelivr": "dist/polyclip-ts.umd.min.js",
   "unpkg": "dist/polyclip-ts.umd.min.js",
-  "types": "types/index.d.ts",
+  "types": "dist/esm/index.d.ts",
   "exports": {
     "umd": "./dist/polyclip-ts.umd.min.js",
-    "import": {
-      "types": "./types/index.d.ts",
-      "default": "./dist/index.js"
-    },
-    "default": "./dist/index.js"
+    "import": "./dist/esm/index.js",
+    "require": "./dist/cjs/index.cjs",
+    "default": "./dist/cjs/index.cjs"
   },
   "files": [
-    "dist/**/*.js",
-    "types/**/*.d.ts"
+    "dist"
   ],
   "keywords": [
     "polygon",
@@ -43,7 +40,7 @@
     "preversion": "npm run test",
     "version": "npm run build && git add -A",
     "postversion": "git push && git push --tags && npm publish",
-    "build": "rollup -c && tsc --declaration true --declarationDir types",
+    "build": "rollup -c && tsup",
     "test": "npm run test:typecheck && npm run test:lint && npm run test:jest",
     "test:lint": "eslint src",
     "test:typecheck": "tsc --noEmit",
@@ -57,9 +54,6 @@
     "@rollup/plugin-node-resolve": "13",
     "@rollup/plugin-terser": "^0.4.1",
     "@rollup/plugin-typescript": "^8.5.0",
-    "@turf/difference": "^5.1.5",
-    "@turf/intersect": "^5.1.6",
-    "@turf/union": "^5.1.5",
     "@types/node": "^18.8.5",
     "@typescript-eslint/eslint-plugin": "^5.25.0",
     "@typescript-eslint/parser": "^5.25.0",
@@ -67,7 +61,9 @@
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
     "jest": "^27.5.1",
-    "martinez-polygon-clipping": "^0.7.1"
+    "jsts": "^2.12.1",
+    "martinez-polygon-clipping": "^0.7.1",
+    "tsup": "^8.3.5"
   },
   "dependencies": {
     "bignumber.js": "^9.1.0",
