@@ -11,6 +11,7 @@ const baseOptions: Options = {
 export default [
   defineConfig({
     ...baseOptions,
+    noExternal: ["splaytree-ts"],
     outDir: "dist/cjs",
     format: "cjs"
   }),
