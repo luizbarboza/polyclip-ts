@@ -2,9 +2,10 @@
 
 import fs from "fs"
 import Benchmark from "benchmark"
-import jstsUnion from "@turf/union"
+import UnionOp from "jsts/org/locationtech/jts/operation/union/UnionOp.js"
+import GeoJSONReader from "jsts/org/locationtech/jts/io/GeoJSONReader.js"
 import w8r from "martinez-polygon-clipping"
-import polyclip from "polyclip-ts"
+import * as polyclip from "polyclip-ts"
 
 const options = {
   onStart() {
@@ -21,6 +22,9 @@ const options = {
   },
 }
 
+// JSTS reader to reuse.
+const reader = new GeoJSONReader()
+
 const holeHole = JSON.parse(fs.readFileSync("./bench/fixtures/hole_hole.geojson"))
 new Benchmark.Suite("Hole_Hole", options)
   .add("polyclip-ts", () => {
@@ -36,7 +40,10 @@ new Benchmark.Suite("Hole_Hole", options)
     )
   })
   .add("JSTS", () => {
-    jstsUnion(holeHole.features[0], holeHole.features[1])
+    UnionOp.union(
+      reader.read(holeHole.features[0].geometry),
+      reader.read(holeHole.features[1].geometry),
+    );
   })
   .run()
 
@@ -55,10 +62,15 @@ new Benchmark.Suite("Asia union", options)
       unionPoly.geometry.coordinates,
     )
   })
-  .add("JSTS", () => jstsUnion(asia.features[0], unionPoly))
+   .add("JSTS", () => {
+      UnionOp.union(
+        reader.read(asia.features[0].geometry),
+        reader.read(unionPoly.geometry),
+      )
+    })
   .run()
 
-const states = JSON.parse(fs.readFileSync("./bench/fixtures/states_source.geojson"))
+const states = JSON.parse(fs.readFileSync("./bench/fixtures/states_source.geojson"));
 new Benchmark.Suite("States clip", options)
   .add("polyclip-ts", () => {
     polyclip.union(
@@ -73,6 +85,9 @@ new Benchmark.Suite("States clip", options)
     )
   })
   .add("JSTS", () => {
-    jstsUnion(states.features[0], states.features[1])
+    UnionOp.union(
+      reader.read(states.features[0].geometry),
+      reader.read(states.features[1].geometry),
+    )
   })
   .run()
